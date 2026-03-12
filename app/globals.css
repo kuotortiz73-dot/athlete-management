@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  --neon: #e8ff3a;
+  --neon-dim: #b8cc20;
+  --bg-base: #0d0d0d;
+  --bg-card: #141414;
+  --bg-surface: #1a1a1a;
+  --bg-elevated: #222222;
+  --border: #2a2a2a;
+  --border-bright: #3a3a3a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #888888;
+  --text-muted: #555555;
+  --danger: #ff3b3b;
+  --warning: #ff9900;
+  --success: #00e676;
+}
+
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-dim);
+}
+
+/* 荧光黄工具类 */
+.neon-text { color: var(--neon); }
+.neon-border { border-color: var(--neon); }
+.neon-bg { background: var(--neon); color: #0d0d0d; }
+.neon-glow { box-shadow: 0 0 8px rgba(232, 255, 58, 0.4); }
+
+/* 运动员卡片 hover（纯 CSS，避免 Server Component 中用 JS 事件） */
+.athlete-card:hover { border-color: var(--neon) !important; }
+
+/* 导航链接 hover */
+.nav-link:hover { color: var(--neon) !important; }
+
+/* 表单 input/select focus */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--neon) !important;
+}
+
+/* 表格行 hover */
+.table-row:hover { background: var(--bg-elevated) !important; }

@@ -1,0 +1,208 @@
+// Prisma Schema - 运动员信息管理系统
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 运动员基本信息
+model Athlete {
+  id          Int       @id @default(autoincrement())
+  name        String
+  gender      String
+  age         Int
+  birthDate   DateTime?
+  nationality String    @default("中国")
+  sport       String
+  position    String?
+  team        String?
+  coachName   String?
+  height      Float?
+  weight      Float?
+  phone       String?
+  email       String?
+  status      String    @default("active")
+  notes       String?
+  avatarUrl   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  physicalTests      PhysicalTest[]
+  competitionRecords CompetitionRecord[]
+  trainingLogs       TrainingLog[]
+  injuries           Injury[]
+  strengthRecords    StrengthRecord[]
+  bodyCompositions   BodyComposition[]
+  planAssignments    TrainingPlanAssignment[]
+}
+
+// 力量训练 1RM 记录
+model StrengthRecord {
+  id        Int      @id @default(autoincrement())
+  athleteId Int
+  athlete   Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  recordDate DateTime
+
+  squat       Float?   // 深蹲 (kg)
+  deadlift    Float?   // 硬拉 (kg)
+  benchPress  Float?   // 卧推 (kg)
+  powerClean  Float?   // 高翻 (kg)
+  snatch      Float?   // 抓举 (kg)
+  cleanJerk   Float?   // 挺举 (kg)
+
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+// 身体成分记录
+model BodyComposition {
+  id        Int      @id @default(autoincrement())
+  athleteId Int
+  athlete   Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  testDate  DateTime
+
+  weight        Float?  // 体重 (kg)
+  bodyFat       Float?  // 体脂率 (%)
+  muscleMass    Float?  // 肌肉量 (kg)
+  boneMass      Float?  // 骨量 (kg)
+  waterContent  Float?  // 水分含量 (%)
+  bmi           Float?  // BMI
+  visceralFat   Int?    // 内脏脂肪等级
+
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+// 体能测试记录
+model PhysicalTest {
+  id         Int      @id @default(autoincrement())
+  athleteId  Int
+  athlete    Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  testDate   DateTime
+  tester     String?
+
+  sprint100m    Float?
+  sprint50m     Float?
+  run3000m      Float?
+  vo2max        Float?
+  verticalJump  Float?
+  broadJump     Float?
+  sitAndReach   Float?
+  agilityTest   Float?
+  overallScore  Float?
+
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+// 比赛记录
+model CompetitionRecord {
+  id              Int      @id @default(autoincrement())
+  athleteId       Int
+  athlete         Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  competitionName String
+  level           String?
+  date            DateTime
+  location        String?
+  event           String?
+  rank            Int?
+  score           String?
+  medalType       String?
+  result          String?
+  notes           String?
+  createdAt       DateTime @default(now())
+}
+
+// 训练日志
+model TrainingLog {
+  id            Int      @id @default(autoincrement())
+  athleteId     Int
+  athlete       Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  date          DateTime
+  duration      Int
+  type          String
+  intensity     Int
+  location      String?
+  warmupNotes   String?
+  mainContent   String?
+  cooldownNotes String?
+  heartRateAvg  Int?
+  heartRateMax  Int?
+  caloriesBurned Int?
+  mood          String?
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+// 训练计划
+model TrainingPlan {
+  id          Int      @id @default(autoincrement())
+  title       String                     // 计划名称
+  sport       String?                    // 适用项目
+  phase       String?                    // 训练阶段：preparatory/competition/transition/general
+  startDate   DateTime?
+  endDate     DateTime?
+  weeks       Int      @default(4)       // 计划总周数
+  description String?
+  goals       String?                    // 训练目标
+  coachName   String?
+  status      String   @default("draft") // draft/active/completed/archived
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sessions    TrainingPlanSession[]
+  assignments TrainingPlanAssignment[]
+}
+
+// 训练计划课次
+model TrainingPlanSession {
+  id           Int          @id @default(autoincrement())
+  planId       Int
+  plan         TrainingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  week         Int                        // 第几周（1-indexed）
+  dayOfWeek    Int                        // 星期几（1=周一，7=周日）
+  sessionTitle String?                    // 课次标题
+  type         String                     // strength/cardio/skill/recovery/mixed
+  duration     Int?                       // 时长（分钟）
+  intensity    Int?                       // 强度（1-10）
+  warmup       String?
+  mainContent  String?
+  cooldown     String?
+  notes        String?
+  completed    Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+}
+
+// 训练计划分配（计划与运动员的关联）
+model TrainingPlanAssignment {
+  id         Int          @id @default(autoincrement())
+  planId     Int
+  plan       TrainingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  athleteId  Int
+  athlete    Athlete      @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  assignedAt DateTime     @default(now())
+
+  @@unique([planId, athleteId])
+}
+
+// 伤病记录
+model Injury {
+  id           Int       @id @default(autoincrement())
+  athleteId    Int
+  athlete      Athlete   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  injuryDate   DateTime
+  recoveryDate DateTime?
+  bodyPart     String
+  injuryType   String
+  severity     String
+  treatment    String?
+  doctor       String?
+  status       String    @default("recovering")
+  notes        String?
+  createdAt    DateTime  @default(now())
+}
