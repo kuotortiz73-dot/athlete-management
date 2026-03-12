@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import AthleteCharts from "@/components/AthleteCharts";
 
+export const dynamic = "force-dynamic";
+
 export default async function ChartsPage({
   params,
 }: {

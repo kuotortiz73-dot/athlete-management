@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import AthleteFilter from "./AthleteFilter";
 
+export const dynamic = "force-dynamic";
+
 const statusConfig: Record<string, { label: string; color: string }> = {
   draft: { label: "草稿", color: "#555555" },
   active: { label: "进行中", color: "#00e676" },

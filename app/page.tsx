@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 const statusConfig: Record<string, { label: string; color: string; dot: string }> = {
   active: { label: "在役", color: "#00e676", dot: "#00e676" },
   injured: { label: "伤病", color: "#ff3b3b", dot: "#ff3b3b" },

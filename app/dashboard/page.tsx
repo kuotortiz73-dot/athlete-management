@@ -3,6 +3,8 @@ import Link from "next/link";
 import DashboardCharts from "@/components/DashboardCharts";
 import { calcBMI } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 function StatCard({
   label,
   value,

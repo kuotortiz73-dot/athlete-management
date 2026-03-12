@@ -10,6 +10,8 @@ import {
   toggleSessionCompleted,
 } from "@/app/actions";
 
+export const dynamic = "force-dynamic";
+
 const statusConfig: Record<string, { label: string; color: string }> = {
   draft: { label: "草稿", color: "#555555" },
   active: { label: "进行中", color: "#00e676" },

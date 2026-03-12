@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { updatePlanSession } from "@/app/actions";
 
+export const dynamic = "force-dynamic";
+
 const fieldStyle = {
   background: "var(--bg-elevated)",
   border: "1px solid var(--border)",

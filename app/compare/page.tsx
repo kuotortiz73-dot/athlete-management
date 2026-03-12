@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import CompareClient from "@/components/CompareClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function ComparePage({
   searchParams,
 }: {

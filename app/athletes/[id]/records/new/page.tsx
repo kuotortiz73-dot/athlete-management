@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import RecordForm from "@/components/RecordForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewRecordPage({
   params,
 }: {

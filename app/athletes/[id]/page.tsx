@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import AthleteTabLayout from "@/components/AthleteTabLayout";
 import { calcBMI, calcRelativeStrength, DeltaBadge } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 const statusConfig: Record<string, { label: string; color: string }> = {
   active: { label: "在役", color: "#00e676" },
   injured: { label: "伤病", color: "#ff3b3b" },
